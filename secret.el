@@ -6,7 +6,7 @@
 ;; Maintainer: Cash Prokop-Weaver
 ;; Created: July 02, 2024
 ;; Modified: July 02, 2024
-;; Version: 0.0.1
+;; Version: 1.0.0
 ;; Homepage: https://github.com/cashweaver/secret
 ;; Package-Requires: ((emacs "24.3"))
 ;;
@@ -33,15 +33,22 @@
   :group 'secret
   :type 'string)
 
-(defun secret-get (name)
-  "Get content of NAME secret file."
-  (let ((secret-file-path (format "%s/%s" secret--dir name)))
-    (if (file-exists-p secret-file-path)
-        (string-clean-whitespace
-         (with-temp-buffer
-           (insert-file-contents secret-file-path)
-           (buffer-substring-no-properties (point-min) (point-max))))
-      (error "Secret not found. No file found at %s." secret-file-path))))
+(defun secret-get (name &optional type)
+  "Get TYPE secret by NAME."
+  (pcase (or type 'file)
+    ('file
+     (secret-get--file (format "%s/%s" secret--dir name)))
+    (_
+     (error "Unknown secret type: %s." type))))
+
+(defun secret-get--file (path)
+  "Get secret from file at PATH."
+  (if (file-exists-p path)
+      (string-clean-whitespace
+       (with-temp-buffer
+         (insert-file-contents path)
+         (buffer-substring-no-properties (point-min) (point-max))))
+    (error "Secret not found. No file found at: %s" path)))
 
 (defun set-secret-dir (dir)
   "Set `secret--dir' to DIR."

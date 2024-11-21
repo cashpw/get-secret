@@ -1,12 +1,15 @@
-#+title: get-secret
+:PROPERTIES:
+:LAST_MODIFIED: [2024-11-21 Thu 10:57]
+:END:
+#+title: secret.el
 
 Simple secret access.
 
 * Usage
 
-1. Save an API key in =~/foo/my-secret.txt=
-2. =(setq get-secret--dir "~/foo")=
-3. =(get-secret "my-secret.txt")=
+1. Save secret key: =~/foo/my-secret.txt=
+2. Specify the directory: =(get-secret-dir "~/foo")=
+3. Get the secret: =(secret-get "my-secret.txt")=
 
 * Install
 
@@ -15,21 +18,21 @@ This package is *not* on MELPA, etc.
 ** Straight
 
 #+begin_src emacs-lisp
-(use-package get-secret
-  :straight `(get-secret :type git :repo "cashpw/get-secret")
-  :custom
-  (get-secret--dir "/foo"))
+(use-package secret
+  :straight '(secret :type git :repo "cashpw/secret.el")
+  :config
+  (set-secret-dir "/foo"))
 #+end_src
 
 ** [[https://github.com/doomemacs/doomemacs][Doom emacs]]
 
 #+begin_src emacs-lisp
 ;; packages.el
-(package! get-secret
-  :recipe (:host github :repo "cashpw/get-secret"))
+(package! secret
+  :recipe (:host github :repo "cashpw/secret.el"))
 
 ;; config.el
-(use-package! get-secret
-  :custom
-  (get-secret--dir "/foo"))
+(use-package! secret
+  :config
+  (set-secret-dir "/foo"))
 #+end_src

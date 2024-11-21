@@ -36,10 +36,8 @@
 (defun secret-get (name &optional type)
   "Get TYPE secret by NAME."
   (pcase (or type 'file)
-    ('file
-     (secret-get--file (format "%s/%s" secret--dir name)))
-    (_
-     (error "Unknown secret type: %s." type))))
+    ('file (secret-get--file (format "%s/%s" secret--dir name)))
+    (_ (error "Unknown secret type: %s." type))))
 
 (defun secret-get--file (path)
   "Get secret from file at PATH."
